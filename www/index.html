@@ -41,24 +41,46 @@
         
     <div class="testbox">
         <form action="/">
-          <h1>Complaint Form</h1>
-          <p>Please send us details about the incident you would like to report. Our Complaint Center will analyze your complaint and take the appropriate measures in order that the reported situation will not occur at any other time in the future.</p>
+          <h1>Add new property</h1>
+          <p id="instructions" >Required fields are marked with *</p>
           <hr/>
-          <div class="item">
+          <!-- <div class="item">
             <p>Date of complaint</p>
             <input type="date" name="name" required/>
             <i class="fas fa-calendar-alt"></i>
-          </div>
+          </div> -->
+          
           <div class="item">
-            <p>Name</p>
-            <input type="text" name="name" placeholder="First" />
-            <input type="text" name="name" placeholder="Last" />
+            <p>Property Name *</p>
+            <input type="text" name="name" placeholder="Property name" required />
           </div>
+
           <div class="item">
+            <p>Property Number *</p>
+            <input type="number" name="number" placeholder="Property number" required />
+          </div>
+
+          <div class="item">
+            <p>Property Type *</p>
+            <input type="text" name="pType" placeholder="Property type" required />
+          </div>
+
+          <div class="item">
+            <p>Lease Type *</p>
+            <input type="text" name="lType" placeholder="Lease type" required />
+          </div>
+
+          <div class="item">
+            <p>Property Location *</p>
+            <input type="text" name="location" placeholder="Property location" required />
+          </div>
+
+          <!-- <div class="item">
             <p>Email</p>
             <input type="text" name="name"/>
-          </div>
-          <div class="item address">
+          </div> -->
+
+          <!-- <div class="item address">
             <p>Address</p>
             <div class="street">
               <input class="street-item" type="text" name="name" placeholder="Street address" />
@@ -75,35 +97,56 @@
                 <option value="5">USA</option>
               </select>
             </div>
-          </div>
-          <div class="item">
+          </div> -->
+
+          <!-- <div class="item">
             <p>Date of the reported incident</p>
             <input type="date" name="name" required/>
             <i class="fas fa-calendar-alt"></i>
-          </div>
-          <div class="item location">
+          </div> -->
+
+          <!-- <div class="item location">
             <p>Incident location</p>
             <input type="text" name="name"/>
+          </div> -->
+
+          <div class="item">
+            <p>Number of Bedrooms*</p>
+            <input type="number" name="bedrooms" placeholder="Number of bedrooms" required />
           </div>
+
+          <div class="item">
+            <p>Number of Bathrooms *</p>
+            <input type="number" name="bathrooms" placeholder="Number of bathrooms" required />
+          </div>
+
+          <div class="item">
+            <p>Asking Price *</p>
+            <input type="number" name="price" placeholder="Asking price" required />
+          </div>
+
           <div class="item complaint-details">
-            <p>Complaint details</p>
+            <p>Local Amenities</p>
             <div class="complaint-details-item">
               <textarea rows="5"></textarea>
             </div>
           </div>
+
           <div class="item desired-outcome">
-            <p>Desired outcome</p>
+            <p>Property Description</p>
             <div class="desired-outcome-item">
               <textarea rows="5"></textarea>
-              <small>By signing you declare that all information you have entered is truthful and accurate.</small>
             </div>
           </div>
-          <h4>Your signature</h4>
+
+          <!-- <h4>Your signature</h4>
           <textarea rows="5"></textarea>
-          <small>By signing you declare that all information you have entered is truthful and accurate.</small>
+          <small>By signing you declare that all information you have entered is truthful and accurate.</small> -->
+          
           <div class="btn-block">
-            <button type="submit" href="/">Send</button>
+            <button onclick="confirmDetails()" type="submit" href="/">Send</button>
           </div>
+
         </form>
       </div>
     </body>

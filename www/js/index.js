@@ -21,6 +21,35 @@
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 document.addEventListener('deviceready', onDeviceReady, false);
 
+var propName, propNumber, propType, leaseType, location
+var bedrooms, bathrooms, size, price, amenities, description
+
+var clicked = false
+
+function confirmDetails() {
+
+    if(!clicked) {
+
+        document.getElementById('instructions').innerHTML = "Please confirm the details and press"
+        clicked = true
+        
+    } else {
+
+        propName = document.getElementById('name').value
+        propNumber = document.getElementById('name').value
+        propType = document.getElementById('name').value
+        leaseType = document.getElementById('name').value
+        location = document.getElementById('name').value
+        bedrooms = document.getElementById('name').value
+        bathrooms = document.getElementById('name').value
+        size = document.getElementById('name').value
+        price = document.getElementById('name').value
+        amenities = document.getElementById('name').value
+        description = document.getElementById('name').value
+
+    }
+}
+
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
 
