@@ -1,11 +1,33 @@
-document.addEventListener("deviceready", onDeviceReady, false);
 
 var currentRow;
 var PROP_TABLE = "properties";
 
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady() {
+    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+    db.transaction(populateDB, errorCB, successCB);
+}
+
 // Populate the database
 function populateDB(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS ' + PROP_TABLE + ' (id INTEGER PRIMARY KEY AUTOINCREMENT, name,number)');
+}
+
+function searchQueryDB(tx) {
+    tx.executeSql("SELECT * FROM " + PROP_TABLE + " where name like ('%"+ document.getElementById("txtName").value + "%')",
+            [], querySuccess, errorCB);
+}
+
+// Transaction error callback
+function errorCB(err) {
+    alert("Error processing SQL: "+err.code);
+}
+
+// Transaction success callback
+function successCB() {
+    var db = window.openDatabase("madprop.db", "1.0", "madprop database", 200000);
+    db.transaction(queryDB, errorCB);
 }
 
 // Query the database
@@ -13,13 +35,8 @@ function queryDB(tx) {
     tx.executeSql('SELECT * FROM ' + PROP_TABLE, [], querySuccess, errorCB);
 }
 
-// function searchQueryDB(tx) {
-//     tx.executeSql("SELECT * FROM " + PROP_TABLE + " where name like ('%"+ document.getElementById("txtName").value + "%')",
-//             [], querySuccess, errorCB);
-// }
 
 // Query the success callback
-//
 function querySuccess(tx, results) {
     var tblText='<table id="t01"><tr><th>ID</th> <th>Name</th> <th>Number</th></tr>';
     var len = results.rows.length;
@@ -36,26 +53,6 @@ function querySuccess(tx, results) {
 //Delete query
 function deleteRow(tx) {
     tx.executeSql('DELETE FROM ' + PROP_TABLE + ' WHERE id = ' + currentRow, [], queryDB, errorCB);
-}
-
-// Transaction error callback
-//
-function errorCB(err) {
-    alert("Error processing SQL: "+err.code);
-}
-
-// Transaction success callback
-//
-function successCB() {
-    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
-    db.transaction(queryDB, errorCB);
-}
-
-    // Cordova is ready
-//
-function onDeviceReady() {
-    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
-    db.transaction(populateDB, errorCB, successCB);
 }
 
 //Insert query
@@ -81,14 +78,6 @@ function goDelete() {
         document.getElementById('qrpopup').style.display='none';
 }
 
-//Show the popup after tapping a row in table
-//
-function goPopup(row,rowname,rownum) {
-    currentRow=row;
-    document.getElementById("qrpopup").style.display="block";
-    document.getElementById("editNameBox").value = rowname;
-    document.getElementById("editNumberBox").value = rownum;
-}
 
 function editRow(tx) {
     tx.executeSql('UPDATE ' + PROP_TABLE + ' SET name ="'+document.getElementById("editNameBox").value+
