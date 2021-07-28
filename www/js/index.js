@@ -1,8 +1,6 @@
 var db = null
 
-document.addEventListener('deviceready', function () {
-    db = window.sqlitePlugin.openDatabase({
-        name: 'my.db',
-        location: 'default',
-    });
-});
+function onDeviceReady() {
+    console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
+    document.getElementById('deviceready').classList.add('ready');
+}

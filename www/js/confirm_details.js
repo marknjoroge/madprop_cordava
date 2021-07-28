@@ -1,17 +1,17 @@
-import { submitValues, showvalues } from './db3.js'
-
-document.addEventListener('deviceready', onDeviceReady, false);
+import { submitValues, showvalues } from './dbhandler'
 
 function onDeviceReady() {
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     document.getElementById('deviceready').classList.add('ready');
 }
 
-var allFilled = false;
+var allFilled = true;
 var sbmtBtn = document.getElementById("submitProp")
 
 var propName, propNumber, propType, leaseType, propLocation, propAge, leaseDuration;
 var bedrooms, bathrooms, size, price, amenities, description;
+
+sbmtBtn.addEventListener("click", submitTheStuff)
 
 window.onload = function () {
 
@@ -28,13 +28,9 @@ window.onload = function () {
     document.getElementById('leaseduration').value = localStorage["leaseDuration"]
     document.getElementById('propdescription').value = localStorage["description"]
     document.getElementById('propage').value = localStorage["propAge"]
-
 }
 
-sbmtBtn.addEventListener("click", submitTheStuff)
-
 function submitTheStuff() {
-
     propName = document.getElementById('propname').value
     propNumber = document.getElementById('propnumber').value
     propType = document.getElementById('proptype').value
@@ -49,53 +45,35 @@ function submitTheStuff() {
     amenities = document.getElementById('localamenities').value
     description = document.getElementById('propdescription').value
 
-    // if (propName == "")
-    //     allFilled = false
-    // if (propNumber == "")
-    //     allFilled = false
-    // if (propType == "")
-    //     allFilled = false
-    // if (leaseType == "")
-    //     allFilled = false
-    // if (propLocation == "")
-    //     allFilled = false
-    // if (bedrooms == "")
-    //     allFilled = false
-    // if (bathrooms == "")
-    //     allFilled = false
-    // if (size == "")
-    //     allFilled = false
-    // if (price == "")
-    //     allFilled = false
+    if (propName == "")
+        allFilled = false
+    if (propNumber == "")
+        allFilled = false
+    if (propType == "")
+        allFilled = false
+    if (leaseType == "")
+        allFilled = false
+    if (propLocation == "")
+        allFilled = false
+    if (bedrooms == "")
+        allFilled = false
+    if (bathrooms == "")
+        allFilled = false
+    if (size == "")
+        allFilled = false
+    if (price == "")
+        allFilled = false
 
-    // console.log("allfilled == " + allFilled)
+    if (allFilled) {
 
+        window.location.href = './index.html'
 
-    if (!allFilled) {
+        submitValues(propName, propNumber, propType, leaseType, bedrooms, bathrooms, size, propLocation, price, amenities, leaseDuration, description, propAge)
 
-        // window.location.href = './index.html'
-
-        // localStorage["propName"] = propName
-        // localStorage["propNumber"] = propNumber
-        // localStorage["propType"] = propType
-        // localStorage["leaseType"] = leaseType
-        // localStorage["bedrooms"] = bedrooms
-        // localStorage["bathrooms"] = bathrooms
-        // localStorage["size"] = size
-        // localStorage["propLocation"] = propLocation
-        // localStorage["price"] = price
-        // localStorage["amenities"] = amenities
-        // localStorage["leaseDuration"] = leaseDuration
-        // localStorage["description"] = description
-        // localStorage["propAge"] = propAge
-
-        submitValues(propName, propNumber, propType, leaseType,
-            propLocation, propAge, leaseDuration, bedrooms,
-            bathrooms, size, price, amenities, description)
+        console.log("propname = ${propName}" + propName)
 
     } else {
         document.getElementById("instructions1").innerHTML = "Please fill in all required fields(marked with *)"
+        window.location.href = '#instructions1'
     }
 }
-
-

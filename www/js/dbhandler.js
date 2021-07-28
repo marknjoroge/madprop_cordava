@@ -1,91 +1,111 @@
-
 var currentRow;
-var PROP_TABLE = "properties";
+var PROP_TABLE = "PropertyTable";
 
-document.addEventListener("deviceready", onDeviceReady, false);
+document.addEventListener("deviceready", createDatabase, false);
 
-function onDeviceReady() {
-    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
-    db.transaction(populateDB, errorCB, successCB);
+function createDatabase() {
+
+    this.db = window.sqlitePlugin.openDatabase({ name: 'MadPropDatabase', location: 'default' });
+
+    this.db.transaction(
+        function (tx) {
+            tx.executeSql("create table if not exists " + PROP_TABLE
+                + " ( id integer primary key,"
+                + " name text,"
+                + " number text,"
+                + " propType text,"
+                + " leaseType text,"
+                + " bedrooms text,"
+                + " bathrooms text,"
+                + " size text,"
+                + " location text,"
+                + " price text,"
+                + " amenities text,"
+                + " duration text,"
+                + " description text,"
+                + " age text)",
+                [],
+                function (tx, results) { },
+                function (tx, error) {
+                    console.log("Error while creating the table: " + error.message);
+                }
+            );
+        }, function (error) {
+            console.log('Transaction ERROR: ' + error.message);
+        }, function () {
+            console.log("Database has been generated successfully.");
+        }
+    );
 }
 
-// Populate the database
-function populateDB(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS ' + PROP_TABLE + ' (id INTEGER PRIMARY KEY AUTOINCREMENT, name,number)');
+export function addValues(propName, propNumber, propType, leaseType, bedrooms, bathrooms, size, propLocation, price, amenities, leaseDuration, description, propAge) {
+
+    createDatabase()
+    var msg = "Information added successfully.";
+    var params = [propName, propNumber, propType, leaseType, bedrooms, bathrooms, size, propLocation, price, amenities, leaseDuration, description, propAge];
+
+    var strQuery = 'INSERT INTO ' + PROP_TABLE + ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,)';
+
+    transact(strQuery, params, msg)
+}
+
+export function updateValues(ID, propName, propNumber, propType, leaseType, propLocation, propAge, leaseDuration, bedrooms, bathrooms, size, price, amenities, description) {
+
+    var params = [propName, propNumber, propType, leaseType, bedrooms, bathrooms, size, propLocation, price, amenities, leaseDuration, description, propAge];
+    var strQuery = 'UPDATE ' + PROP_TABLE + ' SET name=?, number=?, propType=?,'
+        + ' leaseType=?, bedrooms=?, bathrooms=?, size=?, location=?, price=?,'
+        + ' amenities=?, duration=?, description=?, age=?, WHERE ID=?';
+    params.push(ID);
+    var msg = "Information updated successfully.";
+    transact(strQuery, params, msg)
+}
+
+function transact(strQuery, params, msg) {
+
+    db.transaction(function (tx) {
+        tx.executeSql(
+            strQuery,
+            params,
+            function (tx, results) {
+                console.log(results)
+            },
+            function (tx, error) {
+                console.log("add product error: " + error.message);
+            });
+    }, function (error) {
+        console.log('Transaction ERROR: ' + error.message);
+    }, function () {
+        console.log(msg);
+    });
 }
 
 function searchQueryDB(tx) {
-    tx.executeSql("SELECT * FROM " + PROP_TABLE + " where name like ('%"+ document.getElementById("txtName").value + "%')",
-            [], querySuccess, errorCB);
+    tx.executeSql("SELECT * FROM " + PROP_TABLE + " where name like ('%" + document.getElementById("txtName").value + "%')",
+        [], 
+        function (error) {
+            console.log('Transaction ERROR: ' + error.message);
+        }, 
+        function () {
+            console.log(msg);
+        });
 }
 
-// Transaction error callback
-function errorCB(err) {
-    alert("Error processing SQL: "+err.code);
-}
+// function deleteRow(tx) {
+//     tx.executeSql('DELETE FROM ' + PROP_TABLE + ' WHERE id = ' + currentRow, [], queryDB, errorCB);
+// }
 
-// Transaction success callback
-function successCB() {
-    var db = window.openDatabase("madprop.db", "1.0", "madprop database", 200000);
-    db.transaction(queryDB, errorCB);
-}
+// function insertDB(tx) {
+//     tx.executeSql('INSERT INTO ' + PROP_TABLE + ' (name,number) VALUES ("' +document.getElementById("txtName").value
+//             +'","'+document.getElementById("txtNumber").value+'")');
+// }
 
-// Query the database
-function queryDB(tx) {
-    tx.executeSql('SELECT * FROM ' + PROP_TABLE, [], querySuccess, errorCB);
-}
+// function goSearch() {
+//     var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+//     db.transaction(searchQueryDB, errorCB);
+// }
 
-
-// Query the success callback
-function querySuccess(tx, results) {
-    var tblText='<table id="t01"><tr><th>ID</th> <th>Name</th> <th>Number</th></tr>';
-    var len = results.rows.length;
-    for (var i = 0; i < len; i++) {
-        var tmpArgs=results.rows.item(i).id + ",'" + results.rows.item(i).name
-                + "','" + results.rows.item(i).number+"'";
-        tblText +='<tr onclick="goPopup('+ tmpArgs + ');"><td>' + results.rows.item(i).id +'</td><td>'
-                + results.rows.item(i).name +'</td><td>' + results.rows.item(i).number +'</td></tr>';
-    }
-    tblText +="</table>";
-    document.getElementById("tblDiv").innerHTML =tblText;
-}
-
-//Delete query
-function deleteRow(tx) {
-    tx.executeSql('DELETE FROM ' + PROP_TABLE + ' WHERE id = ' + currentRow, [], queryDB, errorCB);
-}
-
-//Insert query
-//
-function insertDB(tx) {
-    tx.executeSql('INSERT INTO ' + PROP_TABLE + ' (name,number) VALUES ("' +document.getElementById("txtName").value
-            +'","'+document.getElementById("txtNumber").value+'")');
-}
-
-function goInsert() {
-    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
-    db.transaction(insertDB, errorCB, successCB);
-}
-
-function goSearch() {
-    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
-    db.transaction(searchQueryDB, errorCB);
-}
-
-function goDelete() {
-        var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
-        db.transaction(deleteRow, errorCB);
-        document.getElementById('qrpopup').style.display='none';
-}
-
-
-function editRow(tx) {
-    tx.executeSql('UPDATE ' + PROP_TABLE + ' SET name ="'+document.getElementById("editNameBox").value+
-            '", number= "'+document.getElementById("editNumberBox").value+ '" WHERE id = '
-            + currentRow, [], queryDB, errorCB);
-}
-function goEdit() {
-    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
-    db.transaction(editRow, errorCB);
-    document.getElementById('qrpopup').style.display='none';
-}
+// function goDelete() {
+//         var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+//         db.transaction(deleteRow, errorCB);
+//         document.getElementById('qrpopup').style.display='none';
+// }

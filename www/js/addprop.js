@@ -60,22 +60,8 @@ function check() {
         instructionsTxt.innerHTML = "Please fill in all required fields(marked with *)"
         allFilled = true;
         console.log('one is empty')
+        window.location.href = '#instructions1'
     } else {
-        window.location.href = './confirm_details.html'
-        // 'propName=' + encodeURIComponen(propName) +
-        // '&propNumber=' + encodeURIComponent(propNumber) +
-        // '&propType=' + encodeURIComponent(propType) +
-        // '&leaseType=' + encodeURIComponent(leaseType) +
-        // '&bedrooms=' + encodeURIComponent(bedrooms) +
-        // '&bathrooms=' + encodeURIComponent(bathrooms) +
-        // '&size=' + encodeURIComponent(size) +
-        // '&proLocation=' + encodeURIComponent(propLocation) +
-        // '&price=' + encodeURIComponent(price) +
-        // '&amenities=' + encodeURIComponent(amenities) +
-        // '&description=' + encodeURIComponent(description) +
-        // '&propAge=' + encodeURIComponent(propAge) +
-        // '&leaseDuration=' + encodeURIComponent(leaseDuration);
-
         localStorage["propName"] = propName
         localStorage["propNumber"] = propNumber
         localStorage["propType"] = propType
@@ -89,6 +75,8 @@ function check() {
         localStorage["leaseDuration"] = leaseDuration
         localStorage["description"] = description
         localStorage["propAge"] = propAge
+
+        window.location.href = './confirm_details.html'
 
         console.log('none is empty')
     }
