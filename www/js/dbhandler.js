@@ -14,7 +14,7 @@ function createDatabase() {
     db.transaction(
         function (tx) {
             tx.executeSql("create table if not exists " + PROP_TABLE
-                + " ( id integer primary key,"
+                + " ( id integer primary key autoincrement,"
                 + " name text,"
                 + " number text,"
                 + " propType text,"
@@ -48,23 +48,8 @@ export function addValues(propName, propNumber, propType, leaseType, bedrooms, b
     var db = window.openDatabase('MadPropDatabase', 'default', 'Mad Property Pal DB', 200000000)
     var msg = "Information added successfully.";
     var params = [propName, propNumber, propType, leaseType, bedrooms, bathrooms, size, propLocation, price, amenities, leaseDuration, description, propAge];
-    params = []
 
-    var strQuery = 'INSERT INTO ' + PROP_TABLE + ' VALUES ('
-        + propName 
-        + ', ' + propNumber 
-        + ', ' + propType
-        + ', ' + leaseType
-        + ', ' + bedrooms
-        + ', ' + bathrooms
-        + ', ' + size
-        + ', ' + propLocation
-        + ', ' + price
-        + ', ' + amenities
-        + ', ' + leaseDuration
-        + ', ' + description
-        + ', ' + propAge 
-        + ')';
+    var strQuery = 'INSERT INTO ' + PROP_TABLE + '(name, number,propType, leaseType, bedrooms, bathrooms, size, location, price, amenities, duration, description, age) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
     transact(db, strQuery, params, msg)
 }
@@ -95,7 +80,7 @@ function transact(db, strQuery, params, msg) {
     }, function (error) {
         console.log('Transaction ERROR: ' + error.message);
     }, function () {
-        console.log(msg + "yeaa");
+        console.log(msg);
     });
 }
 
