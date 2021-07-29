@@ -1,13 +1,17 @@
 var currentRow;
 var PROP_TABLE = "PropertyTable";
 
-document.addEventListener("deviceready", createDatabase, false);
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady() {
+    var db = window.openDatabase('MadPropDatabase', 'default', 'Mad Property Pal DB', 20000000);
+    db.transaction(createDatabase, errorCB, successCB);
+}
 
 function createDatabase() {
 
-    this.db = window.sqlitePlugin.openDatabase({ name: 'MadPropDatabase', location: 'default' });
-
-    this.db.transaction(
+    var db = window.openDatabase('MadPropDatabase', 'default', 'Mad Property Pal DB', 200000000)
+    db.transaction(
         function (tx) {
             tx.executeSql("create table if not exists " + PROP_TABLE
                 + " ( id integer primary key,"
@@ -41,12 +45,28 @@ function createDatabase() {
 export function addValues(propName, propNumber, propType, leaseType, bedrooms, bathrooms, size, propLocation, price, amenities, leaseDuration, description, propAge) {
 
     createDatabase()
+    var db = window.openDatabase('MadPropDatabase', 'default', 'Mad Property Pal DB', 200000000)
     var msg = "Information added successfully.";
     var params = [propName, propNumber, propType, leaseType, bedrooms, bathrooms, size, propLocation, price, amenities, leaseDuration, description, propAge];
+    params = []
 
-    var strQuery = 'INSERT INTO ' + PROP_TABLE + ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,)';
+    var strQuery = 'INSERT INTO ' + PROP_TABLE + ' VALUES ('
+        + propName 
+        + ', ' + propNumber 
+        + ', ' + propType
+        + ', ' + leaseType
+        + ', ' + bedrooms
+        + ', ' + bathrooms
+        + ', ' + size
+        + ', ' + propLocation
+        + ', ' + price
+        + ', ' + amenities
+        + ', ' + leaseDuration
+        + ', ' + description
+        + ', ' + propAge 
+        + ')';
 
-    transact(strQuery, params, msg)
+    transact(db, strQuery, params, msg)
 }
 
 export function updateValues(ID, propName, propNumber, propType, leaseType, propLocation, propAge, leaseDuration, bedrooms, bathrooms, size, price, amenities, description) {
@@ -57,10 +77,10 @@ export function updateValues(ID, propName, propNumber, propType, leaseType, prop
         + ' amenities=?, duration=?, description=?, age=?, WHERE ID=?';
     params.push(ID);
     var msg = "Information updated successfully.";
-    transact(strQuery, params, msg)
+    transact(db, strQuery, params, msg)
 }
 
-function transact(strQuery, params, msg) {
+function transact(db, strQuery, params, msg) {
 
     db.transaction(function (tx) {
         tx.executeSql(
@@ -75,19 +95,28 @@ function transact(strQuery, params, msg) {
     }, function (error) {
         console.log('Transaction ERROR: ' + error.message);
     }, function () {
-        console.log(msg);
+        console.log(msg + "yeaa");
     });
 }
 
 function searchQueryDB(tx) {
     tx.executeSql("SELECT * FROM " + PROP_TABLE + " where name like ('%" + document.getElementById("txtName").value + "%')",
-        [], 
+        [],
         function (error) {
             console.log('Transaction ERROR: ' + error.message);
-        }, 
+        },
         function () {
             console.log(msg);
         });
+}
+
+function errorCB(err) {
+    alert("Error processing SQL: " + err.code);
+}
+
+function successCB() {
+    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+    db.transaction(queryDB, errorCB);
 }
 
 // function deleteRow(tx) {

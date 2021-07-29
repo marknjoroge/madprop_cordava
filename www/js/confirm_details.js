@@ -1,4 +1,4 @@
-import { submitValues, showvalues } from './dbhandler'
+import { addValues} from './dbhandler.js'
 
 function onDeviceReady() {
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
@@ -49,26 +49,26 @@ function submitTheStuff() {
         allFilled = false
     if (propNumber == "")
         allFilled = false
-    if (propType == "")
-        allFilled = false
-    if (leaseType == "")
-        allFilled = false
-    if (propLocation == "")
-        allFilled = false
-    if (bedrooms == "")
-        allFilled = false
-    if (bathrooms == "")
-        allFilled = false
-    if (size == "")
-        allFilled = false
-    if (price == "")
-        allFilled = false
+    // if (propType == "")
+    //     allFilled = false
+    // if (leaseType == "")
+    //     allFilled = false
+    // if (propLocation == "")
+    //     allFilled = false
+    // if (bedrooms == "")
+    //     allFilled = false
+    // if (bathrooms == "")
+    //     allFilled = false
+    // if (size == "")
+    //     allFilled = false
+    // if (price == "")
+    //     allFilled = false
 
     if (allFilled) {
 
-        window.location.href = './index.html'
+        // window.location.href = './index.html'
 
-        submitValues(propName, propNumber, propType, leaseType, bedrooms, bathrooms, size, propLocation, price, amenities, leaseDuration, description, propAge)
+        addValues(propName, propNumber, propType, leaseType, bedrooms, bathrooms, size, propLocation, price, amenities, leaseDuration, description, propAge)
 
         console.log("propname = ${propName}" + propName)
 

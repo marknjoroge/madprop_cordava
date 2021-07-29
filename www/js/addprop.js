@@ -41,20 +41,20 @@ function check() {
         allFilled = false
     if (propNumber == "")
         allFilled = false
-    if (propType == "")
-        allFilled = false
-    if (leaseType == "")
-        allFilled = false
-    if (propLocation == "")
-        allFilled = false
-    if (bedrooms == "")
-        allFilled = false
-    if (bathrooms == "")
-        allFilled = false
-    if (size == "")
-        allFilled = false
-    if (price == "")
-        allFilled = false
+    // if (propType == "")
+    //     allFilled = false
+    // if (leaseType == "")
+    //     allFilled = false
+    // if (propLocation == "")
+    //     allFilled = false
+    // if (bedrooms == "")
+    //     allFilled = false
+    // if (bathrooms == "")
+    //     allFilled = false
+    // if (size == "")
+    //     allFilled = false
+    // if (price == "")
+    //     allFilled = false
 
     if (!allFilled) {
         instructionsTxt.innerHTML = "Please fill in all required fields(marked with *)"
